@@ -46,6 +46,7 @@ const CH="https://t.me/sawashiro_kio";
 const tg=window.Telegram&&Telegram.WebApp;if(tg){tg.ready();tg.expand()}
 const me=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user||null;
 const $=s=>document.querySelector(s);
+const SB='SUPABASE_URL_SHU_YERGA',KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNvcWNkcXRndndjdmNuaXF5dGZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU2Nzc3MzgsImV4cCI6MjExMTI1MzczOH0.msoxd0jsVHDzjqxhweDnPyxW2na9hLN8iMxNP7hfOa4';
 let D;try{D=JSON.parse(localStorage.getItem('mA'))}catch(e){}
 D=D||{anime:[],admins:[],saves:[],donate:'',theme:'dark'};
 const save=()=>{try{localStorage.setItem('mA',JSON.stringify(D))}catch(e){alert("Xotira to'ldi: rasmlar kichikroq bo'lsin")}};
