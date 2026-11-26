@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Muryō Anime</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#252525;--bar:#1b1b1b;--tx:#ddd;--mu:#888;--yl:#ffd966;--card:#2e2e2e;--ac:#7aa2ff}
+:root[data-t=light]{--bg:#eee;--bar:#fff;--tx:#222;--mu:#666;--card:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;min-height:100vh;padding-top:env(safe-area-inset-top)}
+button{font:inherit;color:inherit;cursor:pointer;transition:.2s}
+header{position:sticky;top:0;z-index:20;background:var(--bar);display:flex;align-items:center;gap:12px;padding:8px 14px;box-shadow:0 2px 8px #0006}
+.ic{background:none;border:0;font-size:22px;padding:4px 8px;border-radius:8px}.ic:hover{background:#8883;transform:scale(1.15)}
+.logo{font-weight:800;flex:1}.srch{border:0;border-bottom:1px solid var(--mu);background:none;color:var(--tx);padding:4px;width:140px;outline:0;transition:.3s}.srch:focus{width:200px;border-color:var(--ac)}
+.user{display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:14px 22px;color:var(--mu)}.user img{width:30px;height:30px;border-radius:50%}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:18px;padding:10px 22px 60px}
+.card{position:relative;aspect-ratio:2/3;border-radius:18px;background:var(--yl) center/cover;border:1px solid #fff5;box-shadow:0 3px 8px #0006;cursor:pointer;transition:.25s;overflow:hidden}
+.card:hover{transform:translateY(-6px) scale(1.04)}.card .nm{position:absolute;bottom:0;left:0;right:0;padding:18px 8px 6px;font-size:12px;color:#fff;background:linear-gradient(transparent,#000a)}
+.card .hr,.card .dt{position:absolute;top:6px;background:#0004;border:0;border-radius:50%;width:28px;height:28px;color:#fff;font-size:16px;line-height:1}.hr{left:6px}.dt{right:6px}.hr.on{color:#ff4d6d}.hr:hover,.dt:hover{transform:scale(1.25)}
+.new{background:none;border:1px solid var(--mu);color:var(--mu);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}.new b{font-size:34px;border:1px dashed var(--mu);border-radius:50%;width:54px;height:54px;line-height:50px;text-align:center;font-weight:400}
+.edit .card:not(.sel){filter:brightness(.35)}.ops{position:absolute;inset:0;background:#000a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}.ops button{font-size:26px;background:none;border:0}.ops button:hover{transform:scale(1.4) rotate(8deg)}
+.back{position:fixed;inset:0;background:#000a;z-index:50;display:none;align-items:center;justify-content:center;padding:14px}.back.on{display:flex}
+.modal{background:var(--card);border-radius:16px;padding:18px;width:min(420px,100%);max-height:90vh;overflow:auto;animation:pop .25s}@keyframes pop{from{transform:scale(.85);opacity:0}}
+.modal h3{margin:0 0 10px}.modal input,.modal textarea{width:100%;margin:5px 0;padding:8px;border-radius:8px;border:1px solid var(--mu);background:var(--bg);color:var(--tx)}.modal label{font-size:12px;color:var(--mu)}
+.row{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}.b{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 14px}.b:hover{transform:translateY(-2px)}.b.g{background:#8886}
+.menu{position:fixed;top:0;left:0;bottom:0;width:230px;background:var(--bar);z-index:40;padding:60px 10px 10px;transform:translateX(-100%);transition:.3s}.menu.on{transform:none}
+.menu button{display:block;width:100%;text-align:left;background:none;border:0;padding:12px;border-radius:10px;font-size:16px}.menu button:hover{background:#8883;padding-left:20px}
+#page{position:fixed;inset:0;z-index:30;background:var(--bg) center/cover;display:none;overflow:auto}#page.on{display:block}#page::before{content:"";position:fixed;inset:0;background:#0007}
+#page>*{position:relative}.pw{display:flex;flex-wrap:wrap;gap:16px;padding:16px;align-items:flex-end;min-height:calc(100vh - 60px)}
+.tv{flex:1 1 280px;background:#0008;backdrop-filter:blur(6px);border-radius:18px;padding:14px;color:#fff;max-height:70vh;overflow:auto}
+.tv h4{margin:0 0 6px}.tv small{display:block;opacity:.8;margin-bottom:8px}.act{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:14px}.act i{width:36px;height:36px;border-radius:50%;background:#ff0 center/cover;flex:none}.act span{color:#ccc;font-size:12px;display:block}
+.eps{flex:1 1 280px;display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.ep{display:flex;align-items:center;gap:8px;background:#1b2a6acc;color:#fff;border:1px solid #fff6;border-radius:14px;padding:10px 14px;cursor:pointer;transition:.2s;backdrop-filter:blur(4px)}.ep:hover{transform:translateX(-14px) scale(1.04)}.ep span{flex:1}
+.ep button{background:none;border:0;color:#fff;font-size:18px}
+#vid{position:fixed;z-index:60;left:8vw;top:12vh;width:min(560px,90vw);background:#111;border-radius:12px;box-shadow:0 10px 40px #000;display:none;color:#fff;resize:both;overflow:hidden}#vid.on{display:block}#vid.fs{inset:0!important;width:auto;border-radius:0}
+.vh{display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:move;touch-action:none;user-select:none}.vh b{flex:1;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vh button{background:none;border:0;color:#fff;font-size:16px}.vh button:hover{transform:scale(1.3)}
+#vid video{width:100%;display:block;max-height:75vh;background:#000}.empty{color:var(--mu);padding:10px 22px}
+.hide{display:none!important}
+</style></head><body>
+<header><button class="ic" id="mb">☰</button><span class="logo">🐱 Muryō Anime</span><input class="srch" id="q" placeholder="Search"><button class="ic" id="th">🌓</button></header>
+<div class="menu" id="menu"><button data-m="home">🏠 Home</button><button data-m="saves">❤ Saves</button><button data-m="tg">✈ Telegram</button><button data-m="don" class="adm">💰 Donate</button><button data-m="adm">@admin</button><button data-m="admins" class="adm">👥 Adminlar</button></div>
+<div class="user"><span id="un">Username</span><img id="av" class="hide"></div>
+<div class="grid" id="grid"></div>
+<div id="page"><header><button class="ic" id="bk">⬅ Orqaga</button><span class="logo" id="pt"></span><button class="b adm" id="ae">+ Qism</button></header><div class="pw"><div class="tv" id="tv"></div><div class="eps" id="eps"></div></div></div>
+<div id="vid"><div class="vh" id="vh"><b id="vt"></b><button id="vf">⬜</button><button id="vx">✕</button></div><video id="vp" controls playsinline></video></div>
+<div class="back" id="bd"><div class="modal" id="md"></div></div>
+<script>
+const OWNER=0; // <- O'zingizning Telegram ID raqamingiz (masalan 123456789)
+const CH="https://t.me/sawashiro_kio";
+const tg=window.Telegram&&Telegram.WebApp;if(tg){tg.ready();tg.expand()}
+const me=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user||null;
+const $=s=>document.querySelector(s);
+let D;try{D=JSON.parse(localStorage.getItem('mA'))}catch(e){}
+D=D||{anime:[],admins:[],saves:[],donate:'',theme:'dark'};
+const save=()=>{try{localStorage.setItem('mA',JSON.stringify(D))}catch(e){alert("Xotira to'ldi: rasmlar kichikroq bo'lsin")}};
+const isAdmin=()=>!me||me.id===OWNER||D.admins.some(a=>a.id==me.id); // me yo'q = brauzerda test rejimi
+document.documentElement.dataset.t=D.theme;
+if(me){$('#un').textContent=me.first_name||me.username;if(me.photo_url){$('#av').src=me.photo_url;$('#av').classList.remove('hide')}}
+function css(){let s=document.getElementById('ad');if(!s)document.head.append(s=Object.assign(document.createElement('style'),{id:'ad'}));s.textContent=isAdmin()?'':'.adm,.dt,.ops{display:none!important}'}css();
+let mode='home',editId=null,cur=null,query='';
+const img=f=>new Promise(r=>{if(!f)return r('');const i=new Image;i.onload=()=>{const c=document.createElement('canvas'),k=Math.min(1,600/i.width);c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.7))};i.src=URL.createObjectURL(f)});
+function render(){const g=$('#grid');g.className='grid'+(editId?' edit':'');g.innerHTML='';
+let l=D.anime.filter(a=>(mode!='saves'||D.saves.includes(a.id))&&a.name.toLowerCase().includes(query));
+l.forEach(a=>{const c=document.createElement('div');c.className='card'+(a.id==editId?' sel':'');if(a.cover)c.style.backgroundImage=`url(${a.cover})`;
+c.innerHTML=`<button class="hr ${D.saves.includes(a.id)?'on':''}">${D.saves.includes(a.id)?'♥':'♡'}</button><button class="dt">⋮</button><div class="nm">${esc(a.name)}</div>`;
+c.onclick=e=>{if(editId)return;openA(a.id)};
+c.querySelector('.hr').onclick=e=>{e.stopPropagation();const i=D.saves.indexOf(a.id);i<0?D.saves.push(a.id):D.saves.splice(i,1);save();render()};
+c.querySelector('.dt').onclick=e=>{e.stopPropagation();editId=a.id;render()};
+if(a.id==editId){const o=document.createElement('div');o.className='ops';o.innerHTML='<button title="Yopish">✕</button><button title="Tahrirlash">✏️</button><button title="O\'chirish">🔥</button>';const[x,p,f]=o.children;
+x.onclick=e=>{e.stopPropagation();editId=null;render()};p.onclick=e=>{e.stopPropagation();formA(a)};
+f.onclick=e=>{e.stopPropagation();if(confirm("Anime o'chirilsinmi?")){D.anime=D.anime.filter(z=>z.id!=a.id);editId=null;save();render()}};c.append(o)}
+g.append(c)});
+if(mode=='home'){const n=document.createElement('div');n.className='card new adm';n.innerHTML='<b>+</b>New project';n.onclick=()=>formA();g.append(n)}
+if(mode=='saves'&&!l.length)g.innerHTML='<div class="empty">Saqlangan anime yo\'q</div>'}
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function modal(h){$('#md').innerHTML=h;$('#bd').classList.add('on')}const close=()=>$('#bd').classList.remove('on');
+$('#bd').onclick=e=>{if(e.target.id=='bd')close()};
+function formA(a){a=a||{};modal(`<h3>${a.id?'Tahrirlash':'New project'}</h3><input id="f1" placeholder="Yozuvchi ismi" value="${esc(a.author)}"><input id="f2" placeholder="Studiya nomi" value="${esc(a.studio)}"><input id="f3" placeholder="kk.oo.yyyy (chiqish sanasi)" value="${esc(a.date)}"><input id="f4" placeholder="#heshteg" value="${esc(a.tag)}"><input id="f5" placeholder="Nomi" value="${esc(a.name)}"><input id="f6" placeholder="Janr (Action, Romantika...)" value="${esc(a.genre)}"><textarea id="f7" rows="4" placeholder="Tavsif">${esc(a.desc)}</textarea><label>Bo'lim rasmi (muqova)</label><input type="file" id="f8" accept="image/*"><label>Ichki fon rasmi</label><input type="file" id="f9" accept="image/*"><label>Ovoz aktyorlari (har qatorga: Personaj/Aktyor)</label><textarea id="fa" rows="3" placeholder="Nasa Yudzaki/Lego">${esc((a.cast||[]).map(c=>c.n+'/'+c.v).join('\n'))}</textarea><div class="row"><button class="b g" onclick="close()">Bekor</button><button class="b" id="ok">Saqlash</button></div>`);
+$('#ok').onclick=async()=>{const n=$('#f5').value.trim();if(!n)return alert('Nomini yozing');const o=a.id?a:{id:Date.now(),eps:[]};
+Object.assign(o,{author:$('#f1').value,studio:$('#f2').value,date:$('#f3').value,tag:$('#f4').value,name:n,genre:$('#f6').value,desc:$('#f7').value,cast:$('#fa').value.split('\n').filter(Boolean).map(s=>{const[p,...v]=s.split('/');return{n:p.trim(),v:v.join('/').trim()}})});
+const c=await img($('#f8').files[0]),b=await img($('#f9').files[0]);if(c)o.cover=c;if(b)o.bg=b;if(!a.id)D.anime.push(o);editId=null;save();close();render();if(cur==o.id)openA(o.id)}}
+function openA(id){cur=id;const a=D.anime.find(z=>z.id==id);$('#page').classList.add('on');$('#page').style.backgroundImage=`url(${a.bg||a.cover||''})`;$('#pt').textContent=a.name;
+$('#tv').innerHTML=`<h4>Tavsif:</h4><small>${esc(a.genre)} · ${esc(a.studio)} · ${esc(a.date)} ${esc(a.tag)}</small>${esc(a.desc)}${(a.cast||[]).map(c=>`<div class="act"><i></i><div>${esc(c.n)}<span>${esc(c.v)}</span></div></div>`).join('')}`;
+$('#eps').innerHTML='';a.eps.sort((x,y)=>x.ord-y.ord).forEach(e=>{const d=document.createElement('div');d.className='ep';d.innerHTML=`<span>▶ ${esc(e.name)}</span><button class="adm">⋮</button>`;d.onclick=()=>play(e);
+d.querySelector('button').onclick=ev=>{ev.stopPropagation();modal(`<h3>${esc(e.name)}</h3><div class="row"><button class="b g" onclick="close()">✕</button><button class="b" id="ee">✏️ Tahrirlash</button><button class="b" id="ed" style="background:#d33">🔥 O'chirish</button></div>`);$('#ee').onclick=()=>formE(a,e);$('#ed').onclick=()=>{a.eps=a.eps.filter(z=>z!=e);save();close();openA(id)}};$('#eps').append(d)})}
+function formE(a,e){e=e||{};modal(`<h3>Qism</h3><input id="e1" placeholder="Nomi" value="${esc(e.name)}"><input id="e2" placeholder="kk.oo.yyyy" value="${esc(e.date)}"><input id="e3" type="number" placeholder="Tartib raqami" value="${e.ord||a.eps.length+1}"><input id="e4" placeholder="Video havola (mp4 URL)" value="${esc(e.url)}"><div class="row"><button class="b g" onclick="close()">Bekor</button><button class="b" id="ok">Saqlash</button></div>`);
+$('#ok').onclick=()=>{const o=e.name?e:{};Object.assign(o,{name:$('#e1').value||'Qism',date:$('#e2').value,ord:+$('#e3').value,url:$('#e4').value});if(!e.name)a.eps.push(o);save();close();openA(a.id)}}
+$('#ae').onclick=()=>formE(D.anime.find(z=>z.id==cur));
+$('#bk').onclick=()=>{$('#page').classList.remove('on');cur=null};
+function play(e){$('#vt').textContent=e.name;$('#vp').src=e.url||'';$('#vid').classList.add('on')}
+$('#vx').onclick=()=>{$('#vp').pause();$('#vp').removeAttribute('src');$('#vid').classList.remove('on','fs')};
+$('#vf').onclick=()=>$('#vid').classList.toggle('fs');
+(()=>{const v=$('#vid');let dx,dy,go=0;$('#vh').onpointerdown=e=>{if(e.target.tagName=='BUTTON'||v.classList.contains('fs'))return;go=1;dx=e.clientX-v.offsetLeft;dy=e.clientY-v.offsetTop;e.currentTarget.setPointerCapture(e.pointerId)};
+$('#vh').onpointermove=e=>{if(go){v.style.left=e.clientX-dx+'px';v.style.top=e.clientY-dy+'px'}};$('#vh').onpointerup=()=>go=0})();
+$('#mb').onclick=e=>{e.stopPropagation();$('#menu').classList.toggle('on')};document.addEventListener('click',e=>{if(!e.target.closest('#menu'))$('#menu').classList.remove('on')});
+$('#th').onclick=()=>{D.theme=D.theme=='dark'?'light':'dark';document.documentElement.dataset.t=D.theme;save()};
+$('#q').oninput=e=>{query=e.target.value.toLowerCase();render()};
+$('#menu').onclick=e=>{const m=e.target.dataset.m;if(!m)return;$('#menu').classList.remove('on');
+if(m=='home'||m=='saves'){mode=m;editId=null;render()}
+if(m=='tg'){tg?tg.openTelegramLink(CH):open(CH)}
+if(m=='don'){modal(`<h3>Donate havola</h3><input id="dl" placeholder="https://t.me/..." value="${esc(D.donate)}"><div class="row"><button class="b g" onclick="close()">Bekor</button><button class="b" id="ok">Saqlash</button></div>`);$('#ok').onclick=()=>{D.donate=$('#dl').value;save();close()}}
+if(m=='adm'){const a=D.admins[0];const u=a&&a.user||'admin';tg?tg.openTelegramLink('https://t.me/'+u):open('https://t.me/'+u)}
+if(m=='admins')adminsUI()};
+function adminsUI(){const r=()=>{modal(`<h3>Adminlar</h3>${D.admins.map((a,i)=>`<div class="act" style="color:var(--tx)">${esc(a.user)} (${a.id}) <button class="b g" data-i="${i}">O'chirish</button></div>`).join('')||'<small>Hali yo\'q</small>'}<input id="au" placeholder="@username"><input id="ai" placeholder="Telegram ID (raqam)"><div class="row"><button class="b g" onclick="close()">Yopish</button><button class="b" id="ok">+ Qo'shish</button></div>`);
+$('#ok').onclick=()=>{const id=$('#ai').value.trim();if(!/^\d+$/.test(id))return alert('Telegram ID raqam bo\'lishi kerak');D.admins.push({id:+id,user:$('#au').value.replace('@','')});save();r()};
+document.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{D.admins.splice(+b.dataset.i,1);save();r()})};r()}
+render();
+</script></body></html>
